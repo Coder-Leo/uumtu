@@ -14,6 +14,14 @@ BOT_NAME = 'uumtu'
 SPIDER_MODULES = ['uumtu.spiders']
 NEWSPIDER_MODULE = 'uumtu.spiders'
 
+USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36'
+
+#设置图片下载路径
+IMAGES_STORE = './images'
+
+# 设置cookies
+COOKIES_ENABLED = False
+COOKIES_DEBUG = False
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'uumtu (+http://www.yourdomain.com)'
@@ -64,9 +72,9 @@ ROBOTSTXT_OBEY = True
 
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'uumtu.pipelines.UumtuPipeline': 300,
-#}
+ITEM_PIPELINES = {
+   'uumtu.pipelines.LiuyuerDownloadPipeline': 300,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html
