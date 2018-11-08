@@ -51,7 +51,7 @@ class LiuyuerSpider(Spider):
 
         # 生成每个页面的所有专辑列表中每个专辑的链接请求
         catelist = response.xpath('//div[contains(@class, "mote-list-body")]//dl/dd/a/@href').extract()
-        print('# catelist:', catelist)
+        # print('# catelist:', catelist)
 
         # 生成每一个专辑的链接请求
         for cate in catelist:
@@ -75,9 +75,9 @@ class LiuyuerSpider(Spider):
         # 生成该mote的指定专辑中的所有图的连接请求
         atext = response.xpath('//div[contains(@class, "page")]//a[last()]/text()').extract_first()
         if atext == '末页':
-            print('--- 该专辑存在‘末页’。继续请求下一张图')
+            # print('--- 该专辑存在‘末页’。继续请求下一张图')
             nexturl = response.xpath('//div[contains(@class, "page")]//a[last() - 1]/@href').extract_first()
-            print('---- 下一张图的url:', nexturl)
+            # print('---- 下一张图的url:', nexturl)
             yield response.follow(nexturl, self.parse_single_cate)
         else:
             print('-- 该专辑没有下一张图了！ --')

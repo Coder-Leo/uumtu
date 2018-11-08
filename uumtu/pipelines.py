@@ -9,11 +9,19 @@ from scrapy.pipelines.images import ImagesPipeline
 from scrapy import Request, log
 from scrapy.exceptions import DropItem
 
+# 导入可移动文件的工具包
+import shutil
+
+# 导入项目设置
+from scrapy.utils.project import get_project_settings
+import os
+
 class UumtuPipeline(object):
     def process_item(self, item, spider):
         return item
 
 class LiuyuerDownloadPipeline(ImagesPipeline):
+
     # 使用'/'分割链接，使用最后的部分作为文件名
     def file_path(self, request, response=None, info=None):
         url = request.url
@@ -29,6 +37,22 @@ class LiuyuerDownloadPipeline(ImagesPipeline):
     def item_completed(self, results, item, info):
         print('=== results: ', results)
         image_paths = [x['path'] for ok, x in results if ok]
+        # print('== image_paths: ', image_paths)
         if not image_paths:
             raise DropItem('Image Downloaded Failed')
+
+        # 从项目设置文件中导入图片下载路径
+        storage = get_project_settings().get('IMAGES_STORE')
+
+        # 定义分类保存路径
+        category_name = item['title'].split('第')[0]
+        target_path = os.path.join('./mote/liuyuer', category_name)
+        print('=-= target_path: ', target_path)
+        # 若目录不存在则创建目录
+        if os.path.exists(target_path) == False:
+            os.mkdir(target_path)
+
+        # 将文件从默认路径移动到指定路径下
+        shutil.move(os.path.join(storage, image_paths[0]), os.path.join(target_path, image_paths[0]))
+
         return item
